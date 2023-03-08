@@ -9,10 +9,14 @@ local exec = function(opts)
   local cmd = { "zoxide", "query", "--", entered_path }
   vim.fn.jobstart(cmd, {
     on_stdout = function(_, zoxide_result)
-      vim.cmd("e " .. zoxide_result[1])
+      if zoxide_result[1] ~= "" then
+        vim.cmd.e(zoxide_result[1])
+      end
     end,
     on_stderr = function(_, data)
-      print(table.concat(data))
+      if entered_path:find("/") then
+        vim.cmd.e(entered_path)
+      end
     end,
   })
 end
