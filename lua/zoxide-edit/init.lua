@@ -5,6 +5,12 @@ local default_config = {
 }
 
 local exec = function(opts)
+  if opts.args == "" then
+    -- Avoid error message when running on unnamed file
+    pcall(vim.cmd, "e")
+    return
+  end
+
   local entered_path = opts.args
   local cmd = { "zoxide", "query", "--", entered_path }
   vim.fn.jobstart(cmd, {
@@ -26,7 +32,7 @@ M.setup = function(user_config)
   if config.abbreviate_e_cmd then
     vim.cmd(":cabbrev e <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'E' : 'e')<CR>")
   end
-  vim.api.nvim_create_user_command("E", exec, { nargs = 1 })
+  vim.api.nvim_create_user_command("E", exec, { nargs = "?" })
 end
 
 return M
