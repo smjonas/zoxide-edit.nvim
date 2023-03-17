@@ -32,7 +32,7 @@ M.setup = function(user_config)
   if config.abbreviate_e_cmd then
     vim.cmd(":cabbrev e <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'E' : 'e')<CR>")
   end
-  vim.api.nvim_create_user_command("E", exec, { nargs = "?" })
+  vim.api.nvim_create_user_command("E", exec, { nargs = "?", complete = "file" })
 end
 
 return M
